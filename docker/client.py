@@ -105,6 +105,9 @@ class Client(
     def _post(self, url, **kwargs):
         return self.post(url, **self._set_request_timeout(kwargs))
 
+    def _put(self, url, **kwargs):
+        return self.put(url, **self._set_request_timeout(kwargs))
+
     def _get(self, url, **kwargs):
         return self.get(url, **self._set_request_timeout(kwargs))
 

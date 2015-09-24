@@ -83,6 +83,18 @@ class ContainerApiMixin(object):
         self._raise_for_status(res)
         return res.raw
 
+    @utils.check_resource
+    def archive(self, container, path, resource):
+        res = self._put(
+            self._url("/containers/{0}/archive?path={1}".format(
+                container, path)),
+            data=resource,
+            stream=True,
+            headers={'Content-Type': 'application/x-tar'},
+        )
+        self._raise_for_status(res)
+        return res.raw
+
     def create_container(self, image, command=None, hostname=None, user=None,
                          detach=False, stdin_open=False, tty=False,
                          mem_limit=None, ports=None, environment=None,

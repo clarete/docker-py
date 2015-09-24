@@ -173,6 +173,17 @@ Identical to the `docker cp` command. Get files/folders from the container.
 
 **Returns** (str): The contents of the file as a string
 
+## archive
+Part of what `docker cp` command does. Copy files/folders to the container.
+
+**Params**:
+
+* container (str): The container to copy to
+* path (str): The path within the container
+* resource (str): The tarball data to be extracted under `path`
+
+**Returns** (str): The contents of the file as a string
+
 ## create_container
 
 Creates a container that can then be `.start()` ed. Parameters are similar to

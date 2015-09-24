@@ -74,8 +74,13 @@ def fake_inspect_container_tty(self, container):
     return fake_inspect_container(self, container, tty=True)
 
 
-def fake_resp(method, url, *args, **kwargs):
+def fake_resp(method, full_url, *args, **kwargs):
     key = None
+    url_and_qstring = full_url.split('?')
+    if len(url_and_qstring) == 2:
+        url, qstring = url_and_qstring
+    else:
+        url, qstring = url_and_qstring[0], None
     if url in fake_api.fake_responses:
         key = url
     elif (url, method) in fake_api.fake_responses:
@@ -2184,6 +2189,21 @@ class DockerClientTest(Cleanup, base.BaseTestCase):
 
         self.assertEqual(args[0][0], 'DELETE')
         self.assertEqual(args[0][1], '{0}volumes/{1}'.format(url_prefix, name))
+
+    @base.requires_api_version('1.20')
+    def test_archive(self):
+        base = make_tree([], ['test.txt'])
+        self.addCleanup(shutil.rmtree, base)
+
+        with docker.utils.tar(base) as archive:
+            self.client.archive(
+                fake_api.FAKE_CONTAINER_ID, '/var', archive.read())
+
+        args = fake_request.call_args
+        self.assertEqual(args[0][0], 'PUT')
+        self.assertEqual(args[0][1],
+            '{0}containers/{1}/archive?path=/var'.format(
+                url_prefix, fake_api.FAKE_CONTAINER_ID))
 
     #######################
     #  PY SPECIFIC TESTS  #

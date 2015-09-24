@@ -414,6 +414,11 @@ def get_fake_volume():
 def fake_remove_volume():
     return 204, None
 
+
+def put_fake_archive():
+    return 200, None
+
+
 # Maps real api url to fake response callback
 prefix = 'http+docker://localunixsocket'
 fake_responses = {
@@ -472,6 +477,8 @@ fake_responses = {
     post_fake_unpause_container,
     '{1}/{0}/containers/3cc2351ab11b/json'.format(CURRENT_VERSION, prefix):
     get_fake_port,
+    '{1}/{0}/containers/3cc2351ab11b/archive'.format(CURRENT_VERSION, prefix):
+    put_fake_archive,
     '{1}/{0}/containers/3cc2351ab11b/restart'.format(CURRENT_VERSION, prefix):
     post_fake_restart_container,
     '{1}/{0}/containers/3cc2351ab11b'.format(CURRENT_VERSION, prefix):
